@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style type="text/css" media="screen">
+      .card {
+        text-align: center;
+        margin: auto;
+        width: 500px;
+        border: 1px solid #000;
+        border-radius: 20px;
+        padding: 10px;
+        text-align: justify;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1 style="color: green; text-align: center">Verify your Account</h1>
+      <p style="text-align: center"><%= name %></p>
+      <center><p style="">Thank you for your interest.</p></center>
+      <p>
+        Please confirm your email <%= mail %> by clicking on the button below.
+        We'll communicate with you from time to time via this email so it's
+        important that we have an up-to-date email address in our database.
+      </p>
+      <center>
+        <a
+          type="submit"
+          href="<%=path %> "
+          style="
+            color: white;
+            background: green;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 20px;
+          "
+        >
+          Verify
+        </a>
+      </center>
+      <br />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "App": {
+    "baseUrl": {
+      "backEndUrl": "http://localhost:47000/"
+    },
+    "email": "arabBoard@arabboard.com",
+    "port": "4000",
+    "timeZone": "Asia/Kolkata",
+    "JwtKey": "ky^D$rrG6yHh8%h$CPwY3%WU5rdUs56StP$bkxf"
+  },
+  "Email": {
+    "username": "hemantmodi409@gmail.com",
+    "password": "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"
+  },
+  "database": {
+    "name": "1vodavault",
+    "username": "root",
+    "password": ""
+  }
+}
