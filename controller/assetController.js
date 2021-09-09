@@ -5,7 +5,6 @@ const config = require("config");
 const helper = require("../helper/functions");
 
 const Assets = require("../model/Assets");
-const AssetInvoices = require("../model/assetInvoices");
 const assetFiles = require("../model/assetFiles");
 const assetStatus = require("../model/assetStatus");
 const assetInvoices = require("../model/assetInvoices");
@@ -108,6 +107,8 @@ exports.addMultipleAssets = async (req, res, next) => {
             : null,
           build_number: req.body.build_number ? req.body.build_number[i] : null,
           description: req.body.description ? req.body.description[i] : null,
+          category: req.body.category ? req.body.category[i] : null,
+          brand: req.body.brand ? req.body.brand[i] : null,
           asset_image: array[0].file,
           userId: req.userId,
           asset_files: array,
@@ -133,6 +134,8 @@ exports.addSingleAsset = (req, res, next) => {
     build_number: Joi.allow(),
     description: Joi.allow(),
     domicileId: Joi.number().allow(),
+    category: Joi.allow(),
+    brand: Joi.allow(),
   });
 
   var storage = multer.diskStorage({

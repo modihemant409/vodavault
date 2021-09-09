@@ -11,7 +11,14 @@ const Assets = sequelize.define("asset", {
     allowNull: true,
     defaultValue: " ",
   },
-
+  category: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  brand: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   build_number: {
     type: DataTypes.TEXT,
     allowNull: true,

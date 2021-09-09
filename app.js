@@ -17,6 +17,7 @@ const authRoutes = require("./routes/auth");
 const domicileRoutes = require("./routes/domicile");
 const assetRoutes = require("./routes/asset");
 const dashboardRoutes = require("./routes/dashboard");
+const userRoutes = require("./routes/user");
 
 //Relations
 const relations = require("./Relations/relations").relations();
@@ -42,6 +43,7 @@ app.use("/api/v1", authRoutes);
 app.use("/api/v1/domicile", domicileRoutes);
 app.use("/api/v1/asset", assetRoutes);
 app.use("/api/v1/home", dashboardRoutes);
+app.use("/api/v1/user", userRoutes);
 
 //error handling
 app.use((error, req, res, next) => {

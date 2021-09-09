@@ -1,10 +1,12 @@
+const forgotPassword = require("../model/forgotPassword");
+const User = require("../model/user");
+const Domicile = require("../model/Domicile");
+const Assets = require("../model/Assets");
 const assetFiles = require("../model/assetFiles");
 const assetInvoices = require("../model/assetInvoices");
-const Assets = require("../model/Assets");
 const assetStatus = require("../model/assetStatus");
-const Domicile = require("../model/Domicile");
-const User = require("../model/user");
-const forgotPassword = require("../model/forgotPassword");
+const Quotation = require("../model/quotation");
+const quotationItem = require("../model/quotationItem");
 
 exports.relations = () => {
   //domicile relations
@@ -47,4 +49,14 @@ exports.relations = () => {
   //forgot password
   User.hasOne(forgotPassword);
   forgotPassword.belongsTo(User);
+
+  //Quotation with Asset and User
+  User.hasMany(Quotation);
+  Quotation.belongsTo(User);
+
+  Quotation.hasMany(quotationItem);
+  quotationItem.belongsTo(Quotation);
+
+  Assets.hasMany(quotationItem);
+  quotationItem.belongsTo(Assets);
 };

@@ -6,7 +6,7 @@ const isAuth = require("../middleware/is-auth");
 
 router.post("/add-domicile", isAuth, domicileController.addDomicile);
 router.get("/get-domicile-list", isAuth, domicileController.domicileList);
-router.get(
+router.post(
   "/get-current-domicile",
   isAuth,
   domicileController.GetCurrentDomicile

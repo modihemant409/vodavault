@@ -100,7 +100,7 @@ exports.signup = async (req, res, next) => {
       }
       if (req.file) {
         create["profile_image"] =
-          config("App.baseUrl.backEndUrl") + req.file.path;
+          config.get("App.baseUrl.backEndUrl") + req.file.path;
       }
       const hashedPassword = await bcrypt.hash(create["password"], 12);
       create["password"] = hashedPassword;

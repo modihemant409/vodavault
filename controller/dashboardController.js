@@ -12,6 +12,8 @@ exports.getDashboard = async (req, res, next) => {
     });
     object["total_quotation"] = 0;
     object["total_insurance"] = 0;
+    object["total_jobs"] = 0;
+    object["total_valuation"] = 0;
     return res.send({
       data: object,
       message: "fetched successfully",
