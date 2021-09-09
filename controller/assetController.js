@@ -103,19 +103,18 @@ exports.addMultipleAssets = async (req, res, next) => {
         object.push({
           name: req.body.name[i],
           domicileId: req.body.domicileId[i],
-          purchase_price: req.body.purchase_price[i]
+          purchase_price: req.body.purchase_price
             ? req.body.purchase_price[i]
             : null,
-          build_number: req.body.build_number[0]
-            ? req.body.build_number[i]
-            : null,
+          build_number: req.body.build_number ? req.body.build_number[i] : null,
           description: req.body.description ? req.body.description[i] : null,
           asset_image: array[0].file,
           userId: req.userId,
           asset_files: array,
+          asset_statuses: [{ status: "safe" }],
         });
       }
-      await Assets.bulkCreate(object, { include: assetFiles });
+      await Assets.bulkCreate(object, { include: [assetFiles, assetStatus] });
       console.log(object);
       return res.send({ message: "inserted successfully", status: true });
     } catch (error) {
