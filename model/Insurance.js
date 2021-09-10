@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../database/util");
-const Quotation = sequelize.define("quotation", {
+const Insurance = sequelize.define("insurance", {
   type: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -24,4 +24,4 @@ const Quotation = sequelize.define("quotation", {
   },
 });
 
-module.exports = Quotation;
+module.exports = Insurance;

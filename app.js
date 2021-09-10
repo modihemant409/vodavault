@@ -18,6 +18,8 @@ const domicileRoutes = require("./routes/domicile");
 const assetRoutes = require("./routes/asset");
 const dashboardRoutes = require("./routes/dashboard");
 const userRoutes = require("./routes/user");
+const specialistRoutes = require("./routes/specialist");
+const quotationRoutes = require("./routes/quotation");
 
 //Relations
 const relations = require("./Relations/relations").relations();
@@ -44,6 +46,8 @@ app.use("/api/v1/domicile", domicileRoutes);
 app.use("/api/v1/asset", assetRoutes);
 app.use("/api/v1/home", dashboardRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/specialist", specialistRoutes);
+app.use("/api/v1/quotation", quotationRoutes);
 
 //error handling
 app.use((error, req, res, next) => {

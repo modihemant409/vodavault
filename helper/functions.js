@@ -1,7 +1,7 @@
 const fs = require("fs");
 const Path = require("path");
 const config = require("config");
-
+const axios = require("axios").default;
 exports.removeFile = (file) => {
   if (!file) {
     console.log("no file");
@@ -33,4 +33,34 @@ exports.randomStr = (len, arr) => {
     ans += arr[Math.floor(Math.random() * arr.length)];
   }
   return ans;
+};
+
+exports.sendNotification = async (message, token) => {
+  const notification = {
+    title: "VodaVault",
+    sound: "default",
+    icon: "",
+    ...message,
+  };
+  var notificationBody = {
+    data: notification,
+    to: token,
+  };
+  console.log(notificationBody);
+  axios
+    .post("https://fcm.googleapis.com/fcm/send", notificationBody, {
+      headers: {
+        Authorization:
+          "key=" +
+          "AAAA5mnI-WY:APA91bEuH4xxGXfhQQShPwR2oH1NttlM3kAkuG8Q_-eYDXx0TD4_n8RL_H2qILSKtCgvXqkL5kq0LPyAxypvonn91PyQyfNAo4FZwctLZy8V3fcEVy3sb_gjzTqKI-ruL5xby06luEJq",
+        "Content-Type": "application/json",
+      },
+    })
+    .then((res) => {
+      // console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return true;
 };

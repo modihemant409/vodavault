@@ -6,9 +6,11 @@ const helper = require("../helper/functions");
 
 const Assets = require("../model/Assets");
 const assetFiles = require("../model/assetFiles");
+const Domicile = require("../model/Domicile");
 const assetStatus = require("../model/assetStatus");
 const assetInvoices = require("../model/assetInvoices");
 const { Op } = require("sequelize");
+const specialistAssets = require("../model/specialistAsset");
 
 exports.getAssetList = async (req, res, next) => {
   const asset = await Assets.findAll({
@@ -17,6 +19,9 @@ exports.getAssetList = async (req, res, next) => {
     include: [
       {
         model: assetFiles,
+      },
+      {
+        model: Domicile,
       },
     ],
   });
@@ -55,6 +60,10 @@ exports.getAssetDetail = async (req, res, next) => {
         {
           model: assetStatus,
         },
+        {
+          model: Domicile,
+        },
+        { model: specialistAssets },
         {
           model: assetInvoices,
           as: "warranty",
@@ -96,7 +105,9 @@ exports.addMultipleAssets = async (req, res, next) => {
         let array = new Array();
         for (const file in req.files) {
           if (req.files[file].fieldname.includes(`file[${i}]`)) {
-            array.push({ file: req.files[file].path });
+            array.push({
+              file: config.get("App.baseUrl.backEndUrl") + req.files[file].path,
+            });
           }
         }
         object.push({
@@ -109,7 +120,7 @@ exports.addMultipleAssets = async (req, res, next) => {
           description: req.body.description ? req.body.description[i] : null,
           category: req.body.category ? req.body.category[i] : null,
           brand: req.body.brand ? req.body.brand[i] : null,
-          asset_image: array[0].file,
+          asset_image: array.length ? array[0].file : null,
           userId: req.userId,
           asset_files: array,
           asset_statuses: [{ status: "safe" }],

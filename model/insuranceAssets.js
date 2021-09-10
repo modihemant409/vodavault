@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../database/util");
-const quotationItem = sequelize.define("quotation_item", {});
+const insuranceAssets = sequelize.define("insurance_asset", {});
 
-module.exports = quotationItem;
+module.exports = insuranceAssets;

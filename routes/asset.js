@@ -1,5 +1,5 @@
-const expess = require("express");
-const router = expess.Router();
+const express = require("express");
+const router = express.Router();
 
 const assetController = require("../controller/assetController");
 const isAuth = require("../middleware/is-auth");

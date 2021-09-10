@@ -5,6 +5,7 @@ const uuid = require("uuid");
 const config = require("config");
 
 const User = require("../model/user");
+const Notification = require("../model/notification");
 
 exports.editProfile = async (req, res, next) => {
   var storage = multer.diskStorage({
@@ -83,4 +84,22 @@ exports.getProfile = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+exports.removeNotification = async (req, res, next) => {
+  await Notification.destroy({
+    where: { id: req.params.notificationId, userId: req.userId },
+  });
+  return res.send({ message: "changed successfully.", status: true });
+};
+
+exports.getNotification = async (req, res, next) => {
+  const notification = await Notification.findAll({
+    where: { userId: req.userId },
+  });
+  return res.send({
+    message: "changed successfully.",
+    status: true,
+    data: notification,
+  });
 };
