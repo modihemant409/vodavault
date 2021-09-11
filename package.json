@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "push": "git add . && git commit -m 'updated' && git push origin developer"
   },
   "author": "Hemant",
   "target": "esnext",

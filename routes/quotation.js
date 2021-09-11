@@ -5,6 +5,11 @@ const quotationController = require("../controller/quotationController");
 const isAuth = require("../middleware/is-auth");
 
 router.post("/add-quotation", isAuth, quotationController.addQuotation);
+router.post(
+  "/add-asset-with-insurance",
+  isAuth,
+  quotationController.addAssetWithInsurance
+);
 router.get(
   "/get-pending-quotation",
   isAuth,

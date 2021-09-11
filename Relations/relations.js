@@ -13,6 +13,7 @@ const specialistInfo = require("../model/specialistInfo");
 const specialistRequest = require("../model/specialistRequest");
 const specialistAssets = require("../model/specialistAsset");
 const Notification = require("../model/notification");
+const chatMessage = require("../model/chatMessage");
 
 exports.relations = () => {
   //domicile relations
@@ -109,4 +110,8 @@ exports.relations = () => {
   //notification
   User.hasMany(Notification);
   Notification.belongsTo(User);
+
+  //chat
+  specialistRequest.hasMany(chatMessage, { foreignKey: "requestId" });
+  chatMessage.belongsTo(specialistRequest, { foreignKey: "requestId" });
 };

@@ -328,3 +328,70 @@ exports.markJobAsCompleted = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getSpecialistDashboard = async (req, res, next) => {
+  try {
+    const data = new Object();
+    data["all_jobs"] = await specialistRequest.count({
+      where: { specialistId: req.userId },
+    });
+    data["cancelled_jobs"] = await specialistRequest.count({
+      where: { specialistId: req.userId, status: "cancelled" },
+    });
+    data["pending_jobs"] = await specialistRequest.count({
+      where: { specialistId: req.userId, status: "pending" },
+    });
+    data["my_customers"] = await specialistRequest.findAll({
+      where: { specialistId: req.userId },
+      group: ["userId"],
+    });
+    data["my_customers"] = data["my_customers"].length;
+    return res.send({ data, message: "fetched successfully", status: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getMyCustomer = async (req, res, next) => {
+  try {
+    const request = await specialistRequest.findAll({
+      where: { specialistId: req.userId },
+      attributes: ["userId"],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "first_name", "last_name", "profile_image"],
+        },
+      ],
+      group: ["userId"],
+    });
+    return res.send({
+      data: request,
+      message: "fetched successfully",
+      status: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getJobOfCustomer = async (req, res, next) => {
+  try {
+    const request = await specialistRequest.findAll({
+      where: { specialistId: req.userId, userId: req.params.customerId },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "first_name", "last_name", "profile_image"],
+        },
+      ],
+    });
+    return res.send({
+      data: request,
+      message: "fetched successfully",
+      status: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

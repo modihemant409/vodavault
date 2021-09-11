@@ -20,6 +20,9 @@ const dashboardRoutes = require("./routes/dashboard");
 const userRoutes = require("./routes/user");
 const specialistRoutes = require("./routes/specialist");
 const quotationRoutes = require("./routes/quotation");
+const chatRoutes = require("./routes/chat");
+const insuranceAssets = require("./model/insuranceAssets");
+const Insurance = require("./model/Insurance");
 
 //Relations
 const relations = require("./Relations/relations").relations();
@@ -48,7 +51,13 @@ app.use("/api/v1/home", dashboardRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/specialist", specialistRoutes);
 app.use("/api/v1/quotation", quotationRoutes);
+app.use("/api/v1/chat", chatRoutes);
 
+// async function data() {
+//   const insurance = await insuranceAssets.findOne({ include: [Insurance] });
+//   console.log(insurance.insurance);
+// }
+// data();
 //error handling
 app.use((error, req, res, next) => {
   console.log(error);

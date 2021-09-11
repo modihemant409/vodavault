@@ -5,6 +5,12 @@ const specialistController = require("../controller/specialistController");
 const isAuth = require("../middleware/is-auth");
 const isSpecialist = require("../middleware/isSpecialist");
 
+router.get(
+  "/get-specialist-dashboard",
+  isAuth,
+  isSpecialist,
+  specialistController.getSpecialistDashboard
+);
 router.post("/add-request", isAuth, specialistController.addRequest);
 router.get(
   "/request-again/:requestId",
@@ -19,6 +25,7 @@ router.get(
   isSpecialist,
   specialistController.getAllJobs
 );
+
 router.get(
   "/get-job-detail/:requestId",
   isAuth,
@@ -44,5 +51,16 @@ router.post(
   isSpecialist,
   specialistController.markJobAsCompleted
 );
-
+router.get(
+  "/get-my-customers",
+  isAuth,
+  isSpecialist,
+  specialistController.getMyCustomer
+);
+router.get(
+  "/get-job-of-customers/:customerId",
+  isAuth,
+  isSpecialist,
+  specialistController.getJobOfCustomer
+);
 module.exports = router;

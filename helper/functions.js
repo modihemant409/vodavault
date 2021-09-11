@@ -46,7 +46,6 @@ exports.sendNotification = async (message, token) => {
     data: notification,
     to: token,
   };
-  console.log(notificationBody);
   axios
     .post("https://fcm.googleapis.com/fcm/send", notificationBody, {
       headers: {
@@ -57,7 +56,7 @@ exports.sendNotification = async (message, token) => {
       },
     })
     .then((res) => {
-      // console.log(res);
+      console.log(res.data);
     })
     .catch((err) => {
       console.log(err);
