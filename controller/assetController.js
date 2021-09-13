@@ -9,8 +9,12 @@ const assetFiles = require("../model/assetFiles");
 const Domicile = require("../model/Domicile");
 const assetStatus = require("../model/assetStatus");
 const assetInvoices = require("../model/assetInvoices");
+const quotationAssets = require("../model/quotationAssets");
 const { Op } = require("sequelize");
 const specialistAssets = require("../model/specialistAsset");
+const insuranceAssets = require("../model/insuranceAssets");
+const Quotation = require("../model/quotation");
+const Insurance = require("../model/Insurance");
 
 exports.getAssetList = async (req, res, next) => {
   const asset = await Assets.findAll({
@@ -243,7 +247,12 @@ exports.deleteAsset = async (req, res, next) => {
     const assetId = req.params.assetId;
     const asset = await Assets.findOne({
       where: { id: assetId, userId: req.userId },
+      include: [
+        { model: quotationAssets, include: [Quotation], required: false },
+        { model: insuranceAssets, include: [Insurance], required: false },
+      ],
     });
+    helper.dataNotFound(asset, "Asset Not found", 404);
     const images = await assetFiles.findAll({
       where: { assetId: asset.id },
     });
@@ -259,6 +268,25 @@ exports.deleteAsset = async (req, res, next) => {
     });
     await assetInvoices.destroy({ where: { assetId: asset.id } });
     await assetStatus.destroy({ where: { assetId: asset.id } });
+    await quotationAssets.destroy({ where: { assetId: asset.id } });
+    await insuranceAssets.destroy({ where: { assetId: asset.id } });
+    if (asset.quotation_asset) {
+      const quotation = await Quotation.findOne({
+        where: { id: asset.quotation_asset.quotationId },
+        include: [quotationAssets],
+      });
+      if (!quotation.quotation_assets.length) {
+        await quotation.destroy();
+      }
+    } else {
+      const insurance = await Insurance.findOne({
+        where: { id: asset.insurance_asset.insuranceId },
+        include: [insuranceAssets],
+      });
+      if (!insurance.insurance_assets.length) {
+        await insurance.destroy();
+      }
+    }
     await asset.destroy();
     return res.send({
       message: "asset deleted successfully",

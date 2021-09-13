@@ -2,6 +2,7 @@ const Joi = require("joi");
 const Domicile = require("../model/Domicile");
 const helper = require("../helper/functions");
 const Assets = require("../model/Assets");
+const { Sequelize } = require("sequelize");
 
 exports.addDomicile = async (req, res, next) => {
   try {
@@ -27,9 +28,17 @@ exports.addDomicile = async (req, res, next) => {
 
 exports.domicileList = async (req, res, next) => {
   try {
+    console.log(req.userId);
     const domicile = await Domicile.findAll({
       where: { userId: req.userId },
-      attributes: { exclude: ["userId", "updatedAt"] },
+      attributes: {
+        include: [
+          [Sequelize.fn("COUNT", Sequelize.col("assets.id")), "asset_count"],
+        ],
+        exclude: ["userId", "updatedAt"],
+      },
+      include: [{ model: Assets, attributes: [] }],
+      group: ["assets.domicileId"],
     });
     return res.send({
       status: true,
@@ -98,11 +107,17 @@ exports.domicileDetail = async (req, res, next) => {
     const domicileId = req.params.domicileId || null;
     const domicile = await Domicile.findOne({
       where: { id: domicileId, userId: req.userId },
+      attributes: {
+        include: [
+          [Sequelize.fn("COUNT", Sequelize.col("assets.id")), "asset_count"],
+        ],
+      },
       include: [
         {
           model: Assets,
         },
       ],
+      group: ["assets.domicileId"],
     });
     helper.dataNotFound(domicile, "Domicile not fount", 404);
     return res.send({

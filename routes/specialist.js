@@ -20,6 +20,11 @@ router.get(
 router.post("/cancel-request", isAuth, specialistController.cancelRequest);
 router.get("/get-sent-request", isAuth, specialistController.getSentRequest);
 router.get(
+  "/get-request-detail/:requestId",
+  isAuth,
+  specialistController.getRequestDetail
+);
+router.get(
   "/get-all-jobs",
   isAuth,
   isSpecialist,

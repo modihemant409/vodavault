@@ -1,14 +1,10 @@
 const Joi = require("joi");
-const multer = require("multer");
-const uuid = require("uuid");
 const config = require("config");
 const helper = require("../helper/functions");
 
 const Assets = require("../model/Assets");
 const assetFiles = require("../model/assetFiles");
 const assetStatus = require("../model/assetStatus");
-const assetInvoices = require("../model/assetInvoices");
-const { Op } = require("sequelize");
 const Quotation = require("../model/quotation");
 const Insurance = require("../model/Insurance");
 const insuranceAssets = require("../model/insuranceAssets");
@@ -182,52 +178,45 @@ exports.addAssetWithInsurance = async (req, res, next) => {
     price: Joi.number().required(),
     start_date: Joi.number().allow(),
     end_date: Joi.number().allow(),
+    category: Joi.string().allow(),
+    brand: Joi.string().allow(),
   });
-  var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "assets/profiles");
-    },
-    filename: function (req, file, cb) {
-      cb(null, uuid.v4() + file.originalname.replace(/\s/g, ""));
-    },
-  });
-  var upload = multer({ storage: storage }).single("asset_image");
-  upload(req, res, async function () {
-    try {
-      const { build_number, domicileId, name, price } = req.body;
-      await schema.validateAsync(req.body);
-      const create = {
-        build_number,
-        domicileId,
-        name,
-        userId: req.userId,
-        price,
-        status: "safe and insured",
-        asset_image: config.get("App.baseUrl.backEndUrl") + req.file.path,
-        asset_files: {
-          file: config.get("App.baseUrl.backEndUrl") + req.file.path,
+
+  try {
+    const { build_number, domicileId, name, price } = req.body;
+    await schema.validateAsync(req.body);
+    const create = {
+      build_number,
+      domicileId,
+      name,
+      userId: req.userId,
+      category: req.body.category || null,
+      brand: req.body.brand || null,
+      purchase_price: price,
+      status: "safe and insured",
+      asset_image:
+        config.get("App.baseUrl.backEndUrl") +
+        "assets/serverDefault/mobile.png",
+      asset_statuses: [{ status: "safe" }, { status: "safe and insured" }],
+      insurance_asset: {
+        insurance: {
+          type: "asset cover",
+          price: price,
+          start_date: req.body.start_date || null,
+          end_date: req.body.end_date || null,
+          userId: req.userId,
         },
-        asset_statuses: [{ status: "safe" }, { status: "safe and insured" }],
-        insurance_asset: {
-          insurance: {
-            type: "asset cover",
-            price: price,
-            start_date: req.body.start_date || null,
-            end_date: req.body.end_date || null,
-            userId: req.userId,
-          },
-        },
-      };
-      await Assets.create(create, {
-        include: [
-          { model: insuranceAssets, include: [Insurance] },
-          assetFiles,
-          assetStatus,
-        ],
-      });
-      return res.send({ message: "Inserted successfully", status: true });
-    } catch (error) {
-      next(error);
-    }
-  });
+      },
+    };
+    await Assets.create(create, {
+      include: [
+        { model: insuranceAssets, include: [Insurance] },
+        assetFiles,
+        assetStatus,
+      ],
+    });
+    return res.send({ message: "Inserted successfully", status: true });
+  } catch (error) {
+    next(error);
+  }
 };

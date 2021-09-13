@@ -16,7 +16,7 @@ exports.addRequest = async (req, res, next) => {
   try {
     const create = new Object();
     const check = await specialistRequest.findOne({
-      were: { domicileId: req.body.domicileId },
+      where: { domicileId: req.body.domicileId },
     });
     helper.dataNotFound(!check, "request already sent for this Domicile", 409);
     for (const key in req.body) {
@@ -116,6 +116,33 @@ exports.getSentRequest = async (req, res, next) => {
         },
         {
           model: specialistAssets,
+        },
+      ],
+    });
+    return res.send({
+      message: "fetched successfully",
+      data: request,
+      status: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getRequestDetail = async (req, res, next) => {
+  try {
+    const request = await specialistRequest.findOne({
+      where: { id: req.params.requestId },
+      include: [
+        { model: Domicile },
+        {
+          model: User,
+          foreignKey: "specialistId",
+          as: "specialist",
+        },
+        {
+          model: specialistAssets,
+          include: [Assets],
         },
       ],
     });
