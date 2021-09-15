@@ -14,6 +14,8 @@ const specialistRequest = require("../model/specialistRequest");
 const specialistAssets = require("../model/specialistAsset");
 const Notification = require("../model/notification");
 const chatMessage = require("../model/chatMessage");
+const Valuation = require("../model/Valuation");
+const valuationAssets = require("../model/valuationAssets");
 
 exports.relations = () => {
   //domicile relations
@@ -77,6 +79,16 @@ exports.relations = () => {
 
   Assets.hasOne(insuranceAssets);
   insuranceAssets.belongsTo(Assets);
+
+  //valuation
+  User.hasMany(Valuation);
+  Valuation.belongsTo(User);
+
+  Valuation.hasMany(valuationAssets);
+  valuationAssets.belongsTo(Valuation);
+
+  Assets.hasOne(valuationAssets);
+  valuationAssets.belongsTo(Assets);
 
   //specialist info
   User.hasOne(specialistInfo, { foreignKey: "specialistId" });

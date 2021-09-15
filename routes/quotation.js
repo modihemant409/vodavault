@@ -25,5 +25,11 @@ router.get(
   isAuth,
   quotationController.getAssetForQuotation
 );
-
+router.post("/add-valuation", isAuth, quotationController.addValuation);
+router.get(
+  "/remove-valuation/:valuationId",
+  isAuth,
+  quotationController.removeValuation
+);
+router.get("/get-valuation", isAuth, quotationController.getValuation);
 module.exports = router;

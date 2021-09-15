@@ -15,6 +15,8 @@ const specialistAssets = require("../model/specialistAsset");
 const insuranceAssets = require("../model/insuranceAssets");
 const Quotation = require("../model/quotation");
 const Insurance = require("../model/Insurance");
+const valuationAssets = require("../model/valuationAssets");
+const Valuation = require("../model/Valuation");
 
 exports.getAssetList = async (req, res, next) => {
   const asset = await Assets.findAll({
@@ -250,6 +252,7 @@ exports.deleteAsset = async (req, res, next) => {
       include: [
         { model: quotationAssets, include: [Quotation], required: false },
         { model: insuranceAssets, include: [Insurance], required: false },
+        { model: valuationAssets, include: [Insurance], required: false },
       ],
     });
     helper.dataNotFound(asset, "Asset Not found", 404);
@@ -270,6 +273,7 @@ exports.deleteAsset = async (req, res, next) => {
     await assetStatus.destroy({ where: { assetId: asset.id } });
     await quotationAssets.destroy({ where: { assetId: asset.id } });
     await insuranceAssets.destroy({ where: { assetId: asset.id } });
+    await valuationAssets.destroy({ where: { assetId: asset.id } });
     if (asset.quotation_asset) {
       const quotation = await Quotation.findOne({
         where: { id: asset.quotation_asset.quotationId },
@@ -278,13 +282,21 @@ exports.deleteAsset = async (req, res, next) => {
       if (!quotation.quotation_assets.length) {
         await quotation.destroy();
       }
-    } else {
+    } else if (asset.insurance_asset) {
       const insurance = await Insurance.findOne({
         where: { id: asset.insurance_asset.insuranceId },
         include: [insuranceAssets],
       });
       if (!insurance.insurance_assets.length) {
         await insurance.destroy();
+      }
+    } else {
+      const valuation = await Valuation.findOne({
+        where: { id: asset.valuation_assets.valuationId },
+        include: [valuationAssets],
+      });
+      if (!quotation.valuation_assets.length) {
+        await valuation.destroy();
       }
     }
     await asset.destroy();

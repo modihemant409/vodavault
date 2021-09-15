@@ -10,6 +10,8 @@ const Insurance = require("../model/Insurance");
 const insuranceAssets = require("../model/insuranceAssets");
 const quotationAssets = require("../model/quotationAssets");
 const Domicile = require("../model/Domicile");
+const Valuation = require("../model/Valuation");
+const valuationAssets = require("../model/valuationAssets");
 
 exports.addQuotation = async (req, res, next) => {
   try {
@@ -222,4 +224,65 @@ exports.addAssetWithInsurance = async (req, res, next) => {
 };
 
 //valuation
-exports.addValuation = async (req, res, next) => {};
+exports.addValuation = async (req, res, next) => {
+  try {
+    let valuation;
+    var create = new Object();
+    for (const key in req.body) {
+      create[key] = req.body[key];
+    }
+    create["userId"] = req.userId;
+    valuation = await Valuation.create(create);
+    const assets = req.body.asset_detail;
+    for (const key in assets) {
+      assets[key]["valuationId"] = valuation.id;
+      assets[key]["userId"] = req.userId;
+    }
+    await valuationAssets.bulkCreate(assets);
+    return res.send({
+      message: "valuation added successfully",
+      status: true,
+      data: valuation.id,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getValuation = async (req, res, next) => {
+  try {
+    const valuation = await Valuation.findAll({
+      where: { userId: req.userId },
+      include: [
+        {
+          model: valuationAssets,
+          include: [{ model: Assets, include: [{ model: Domicile }] }],
+        },
+      ],
+    });
+    return res.send({
+      message: "Valuation fetched successfully",
+      data: valuation,
+      status: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.removeValuation = async (req, res, next) => {
+  try {
+    const valuation = await Valuation.findOne({
+      where: { id: req.params.valuationId, userId: req.userId },
+    });
+    helper.dataNotFound(valuation, "Valuation not found", 404);
+    await valuationAssets.destroy({ where: { valuationId: valuation.id } });
+    await valuation.destroy();
+    return res.send({
+      status: true,
+      message: "valuation removed successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

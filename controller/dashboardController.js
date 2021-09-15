@@ -3,6 +3,7 @@ const Domicile = require("../model/Domicile");
 const insuranceAssets = require("../model/insuranceAssets");
 const quotationAssets = require("../model/quotationAssets");
 const specialistRequest = require("../model/specialistRequest");
+const valuationAssets = require("../model/valuationAssets");
 
 exports.getDashboard = async (req, res, next) => {
   try {
@@ -26,7 +27,9 @@ exports.getDashboard = async (req, res, next) => {
     object["total_jobs"] = await specialistRequest.count({
       where: { userId: req.userId },
     });
-    object["total_valuation"] = 0;
+    object["total_valuation"] = await valuationAssets.count({
+      include: [{ model: Assets, where: { userId: req.userId } }],
+    });
     return res.send({
       data: object,
       message: "fetched successfully",

@@ -68,24 +68,11 @@ app.use((error, req, res, next) => {
   res.status(statusCode).json({ status: status, message: message, data: data });
 });
 
-let Server;
-let io;
 db.sync()
   .then((result) => {
     Server = app.listen(PORT, (e) => {
       console.log("server is listening on " + PORT + " port");
     });
-
-    // io = socket(Server, {
-    //   cors: {
-    //     origin: "*",
-    //     methods: ["GET", "POST"],
-    //   },
-    // });
-    // require("./routes/livelecture").setio(io);
-    // const livelecture = require("./routes/livelecture").app;
-
-    // app.use("/api/v1/live", livelecture);
   })
   .catch((err) => {
     console.log(err);
