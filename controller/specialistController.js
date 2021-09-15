@@ -366,7 +366,7 @@ exports.getSpecialistDashboard = async (req, res, next) => {
       where: { specialistId: req.userId, status: "cancelled" },
     });
     data["pending_jobs"] = await specialistRequest.count({
-      where: { specialistId: req.userId, status: "pending" },
+      where: { specialistId: req.userId, status: "alloted" },
     });
     data["my_customers"] = await specialistRequest.findAll({
       where: { specialistId: req.userId },
