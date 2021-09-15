@@ -286,3 +286,29 @@ exports.removeValuation = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getAssetForValuation = async (req, res, next) => {
+  try {
+    const assets = await Assets.findAndCountAll({
+      subQuery: false,
+      include: [
+        { model: valuationAssets, required: false },
+        {
+          model: valuationAssets,
+          required: false,
+        },
+        {
+          model: Domicile,
+        },
+      ],
+      where: {
+        userId: req.userId,
+        "$valuation_asset.id$": null,
+        "$valuation_asset.id$": null,
+      },
+    });
+    return res.send({ data: assets, status: true, message: "fetched" });
+  } catch (error) {
+    next(error);
+  }
+};

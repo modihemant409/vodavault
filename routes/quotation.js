@@ -26,6 +26,11 @@ router.get(
   quotationController.getAssetForQuotation
 );
 router.post("/add-valuation", isAuth, quotationController.addValuation);
+router.post(
+  "/get-assets-for-valuation",
+  isAuth,
+  quotationController.getAssetForValuation
+);
 router.get(
   "/remove-valuation/:valuationId",
   isAuth,
