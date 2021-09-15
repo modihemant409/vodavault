@@ -220,3 +220,6 @@ exports.addAssetWithInsurance = async (req, res, next) => {
     next(error);
   }
 };
+
+//valuation
+exports.addValuation = async (req, res, next) => {};

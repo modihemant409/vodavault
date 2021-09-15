@@ -158,7 +158,7 @@ exports.getRequestDetail = async (req, res, next) => {
 
 exports.getAllJobs = async (req, res, next) => {
   try {
-    const request = specialistRequest.findAll({
+    const request = await specialistRequest.findAll({
       where: { specialistId: req.userId },
       include: [
         { model: Domicile },
@@ -383,11 +383,13 @@ exports.getMyCustomer = async (req, res, next) => {
   try {
     const request = await specialistRequest.findAll({
       where: { specialistId: req.userId },
-      attributes: ["userId"],
       include: [
         {
           model: User,
           attributes: ["id", "first_name", "last_name", "profile_image"],
+        },
+        {
+          model: Domicile,
         },
       ],
       group: ["userId"],
@@ -410,6 +412,9 @@ exports.getJobOfCustomer = async (req, res, next) => {
         {
           model: User,
           attributes: ["id", "first_name", "last_name", "profile_image"],
+        },
+        {
+          model: Domicile,
         },
       ],
     });
