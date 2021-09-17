@@ -33,12 +33,16 @@ exports.domicileList = async (req, res, next) => {
       where: { userId: req.userId },
       attributes: {
         include: [
-          [Sequelize.fn("COUNT", Sequelize.col("assets.id")), "asset_count"],
+          [
+            Sequelize.fn("COUNT", Sequelize.col("assets.domicileId")),
+            "asset_count",
+          ],
         ],
         exclude: ["userId", "updatedAt"],
       },
       include: [{ model: Assets, attributes: [] }],
-      group: ["assets.domicileId"],
+      group: ["assets.domicileId", "id"],
+      subQuery: false,
     });
     return res.send({
       status: true,
@@ -163,10 +167,11 @@ exports.GetCurrentDomicile = async (req, res, next) => {
       let km = r * c * 1000;
       if (km <= 100) {
         return res.send({
-          message: "No domicile found",
+          message: "domicile found",
           status: true,
           data: domicile,
         });
+        return true;
       }
     });
     return res.send({ message: "No domicile found", status: true, data: null });

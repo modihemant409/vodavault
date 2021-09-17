@@ -105,7 +105,7 @@ exports.signup = async (req, res, next) => {
       const hashedPassword = await bcrypt.hash(create["password"], 12);
       create["password"] = hashedPassword;
       console.log(create);
-      user = await User.create(create, { logging: true }, { transaction });
+      user = await User.create(create, { transaction });
 
       const buff = Buffer.from(user.email, "utf-8");
       console.log(
@@ -189,13 +189,13 @@ exports.login = async (req, res, next) => {
 
     const checkPassword = await bcrypt.compare(password, user.password);
     helper.dataNotFound(checkPassword, "Password Incorrect", 401);
-    if (user.email_verified != "1") {
-      const error = new Error(
-        "Email not verified. Please Verify Your Email " + user.email
-      );
-      error.statuscode = 401;
-      throw error;
-    }
+    // if (user.email_verified != "1") {
+    //   const error = new Error(
+    //     "Email not verified. Please Verify Your Email " + user.email
+    //   );
+    //   error.statuscode = 401;
+    //   throw error;
+    // }
     if (user.is_blocked == "Blocked") {
       const error = new Error("Your account has been blocked");
       error.statuscode = 401;
@@ -423,33 +423,42 @@ exports.setNewPassword = async (req, res, next) => {
 };
 
 exports.socialLogin = async (req, res, next) => {
-  let user = await User.findOne({ where: { email: req.body.email } });
-  if (!user) {
-    const create = new Object();
-    if (req.body.profile_pic) {
-      create["profile_image"] = request.body.profile_pic;
-    }
-
-    let Password = "".padStart(10, Math.random(0, 9999));
-    create["password"] = await bcrypt.hash(Password, 12);
-    create["user_type"] = "user";
-    for (const key in req.body) {
-      if (key == "profile_pic") {
-        continue;
+  try {
+    let user = await User.findOne({ where: { email: req.body.email } });
+    if (!user) {
+      const create = new Object();
+      if (req.body.profile_pic) {
+        create["profile_image"] = request.body.profile_pic;
       }
-      create[key] = req.body[key];
-    }
-    user = await User.create(create);
-  }
-  const token = jwt.sign(
-    { email: user.email, userId: user.id },
-    config.get("App.JwtKey")
-  );
-  await user.update({
-    token: token,
-    device_token: req.body.device_token || null,
-    device_type: req.body.device_type || null,
-  });
 
-  return res.send({ data: user, message: "Login successfully.", status: true });
+      let Password = "".padStart(10, Math.random(0, 9999));
+      create["password"] = await bcrypt.hash(Password, 12);
+      create["user_type"] = "user";
+      for (const key in req.body) {
+        if (key == "profile_pic") {
+          continue;
+        }
+        create[key] = req.body[key];
+      }
+      create["email_verified"] = "1";
+      user = await User.create(create);
+    }
+    const token = jwt.sign(
+      { email: user.email, userId: user.id },
+      config.get("App.JwtKey")
+    );
+    await user.update({
+      token: token,
+      device_token: req.body.device_token || null,
+      device_type: req.body.device_type || null,
+    });
+
+    return res.send({
+      data: user,
+      message: "Login successfully.",
+      status: true,
+    });
+  } catch (err) {
+    return next(err);
+  }
 };

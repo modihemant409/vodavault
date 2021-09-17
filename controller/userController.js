@@ -87,10 +87,14 @@ exports.getProfile = async (req, res, next) => {
 };
 
 exports.removeNotification = async (req, res, next) => {
-  await Notification.destroy({
-    where: { id: req.params.notificationId, userId: req.userId },
-  });
-  return res.send({ message: "changed successfully.", status: true });
+  try {
+    await Notification.destroy({
+      where: { id: req.params.notificationId, userId: req.userId },
+    });
+    return res.send({ message: "removed successfully.", status: true });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getNotification = async (req, res, next) => {

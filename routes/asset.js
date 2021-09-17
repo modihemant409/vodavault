@@ -16,6 +16,7 @@ router.get(
   assetController.getAssetByBuild
 );
 router.post("/add-single-asset", isAuth, assetController.addSingleAsset);
+router.post("/add-image-to-asset", isAuth, assetController.addImageToAsset);
 router.post("/add-multiple-asset", isAuth, assetController.addMultipleAssets);
 router.post("/change-asset-status", isAuth, assetController.changeAssetStatus);
 router.put("/update-asset", isAuth, assetController.updateAsset);

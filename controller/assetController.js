@@ -252,7 +252,7 @@ exports.deleteAsset = async (req, res, next) => {
       include: [
         { model: quotationAssets, include: [Quotation], required: false },
         { model: insuranceAssets, include: [Insurance], required: false },
-        { model: valuationAssets, include: [Insurance], required: false },
+        { model: valuationAssets, include: [Valuation], required: false },
       ],
     });
     helper.dataNotFound(asset, "Asset Not found", 404);
@@ -282,7 +282,8 @@ exports.deleteAsset = async (req, res, next) => {
       if (!quotation.quotation_assets.length) {
         await quotation.destroy();
       }
-    } else if (asset.insurance_asset) {
+    }
+    if (asset.insurance_asset) {
       const insurance = await Insurance.findOne({
         where: { id: asset.insurance_asset.insuranceId },
         include: [insuranceAssets],
@@ -290,7 +291,8 @@ exports.deleteAsset = async (req, res, next) => {
       if (!insurance.insurance_assets.length) {
         await insurance.destroy();
       }
-    } else {
+    }
+    if (asset.valuation_assets) {
       const valuation = await Valuation.findOne({
         where: { id: asset.valuation_assets.valuationId },
         include: [valuationAssets],
@@ -419,7 +421,7 @@ exports.addImageToAsset = async (req, res, next) => {
       cb(null, uuid.v4() + file.originalname.replace(/\s/g, ""));
     },
   });
-  var upload = multer({ storage: storage }).array("file");
+  var upload = multer({ storage: storage }).single("file");
   upload(req, res, async function () {
     try {
       const { assetId } = req.body;
