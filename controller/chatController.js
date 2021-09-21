@@ -38,20 +38,20 @@ exports.sendMessage = async (req, res, next) => {
         include: [{ model: User, as: "specialist" }, { model: User }],
       });
       await chatMessage.create(create);
-      message["type"] = "Request Placed";
+      message["type"] = "message Received";
       message["request_id"] = request.id;
       if (req.body.from_ == "specialist") {
         message["message"] =
           req.body.type == "text"
             ? `Message received from specialist ${request.specialist.first_name}`
             : `File received from specialist ${request.specialist.first_name}`;
-        await helper.sendNotification(message, request.specialist.device_token);
+        await helper.sendNotification(message, request.user.device_token);
       } else {
         message["message"] =
           req.body.type == "text"
             ? `Message received from Customer ${request.user.first_name}`
             : `File received from specialist ${request.user.first_name}`;
-        await helper.sendNotification(message, request.user.device_token);
+        await helper.sendNotification(message, request.specialist.device_token);
       }
       await Notification.create({
         notification: JSON.stringify(message),

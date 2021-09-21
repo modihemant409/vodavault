@@ -37,7 +37,9 @@ async function handleQuotations(req, next) {
     let quotation;
     var create = new Object();
     for (const key in req.body) {
-      if (["quotationId", "is_completed", "asset_detail"].includes(key)) {
+      if (
+        ["quotationId", "is_completed", "asset_detail", "through"].includes(key)
+      ) {
         continue;
       }
       create[key] = req.body[key];
@@ -58,6 +60,7 @@ async function handleQuotations(req, next) {
     for (const key in assets) {
       assets[key]["quotationId"] = quotation.id;
       assets[key]["userId"] = req.userId;
+      assets[key]["through"] = req.body.through;
     }
 
     await quotationAssets.bulkCreate(assets);
@@ -83,7 +86,11 @@ async function handleInsurance(req, next, quotation) {
     create["insurance_assets"] = [];
     const asset_list = [];
     for (const key in data.quotation_assets) {
+      if (key == "id") {
+        continue;
+      }
       const innerData = data.quotation_assets[key].dataValues;
+      delete innerData.id;
       create["insurance_assets"].push(innerData);
       asset_list.push(innerData.assetId);
     }
