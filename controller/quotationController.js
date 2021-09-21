@@ -78,7 +78,7 @@ async function handleInsurance(req, next, quotation) {
     });
     const create = new Object();
     for (const key in data.dataValues) {
-      if (key == "quotation_assets") {
+      if (key == "quotation_assets" || key == "id") {
         continue;
       }
       create[key] = quotation[key];
