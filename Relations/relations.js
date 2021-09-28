@@ -112,7 +112,6 @@ exports.relations = () => {
   });
 
   //specialist assets
-
   specialistRequest.hasMany(specialistAssets);
   specialistAssets.belongsTo(specialistRequest);
 

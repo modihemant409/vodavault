@@ -35,17 +35,36 @@ exports.randomStr = (len, arr) => {
   return ans;
 };
 
-exports.sendNotification = async (message, token) => {
-  const notification = {
-    title: "VodaVault",
-    sound: "default",
-    icon: "",
-    ...message,
-  };
-  var notificationBody = {
-    data: notification,
-    to: token,
-  };
+exports.sendNotification = async (deviceType, message, token) => {
+  var notification;
+  var notificationBody;
+  if (deviceType == "android") {
+    notification = {
+      title: "VodaVault",
+      sound: "default",
+      icon: "",
+      ...message,
+    };
+    notificationBody = {
+      data: notification,
+      to: token,
+    };
+  } else {
+    notification = {
+      title: "VodaVault",
+      sound: "default",
+      icon: "",
+      ...message,
+    };
+    const body = {
+      ...message,
+    };
+    notificationBody = {
+      data: notification,
+      to: token,
+      body,
+    };
+  }
   axios
     .post("https://fcm.googleapis.com/fcm/send", notificationBody, {
       headers: {

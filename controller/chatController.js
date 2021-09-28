@@ -45,13 +45,21 @@ exports.sendMessage = async (req, res, next) => {
           req.body.type == "text"
             ? `Message received from specialist ${request.specialist.first_name}`
             : `File received from specialist ${request.specialist.first_name}`;
-        await helper.sendNotification(message, request.user.device_token);
+        await helper.sendNotification(
+          request.user.device_type,
+          message,
+          request.user.device_token
+        );
       } else {
         message["message"] =
           req.body.type == "text"
             ? `Message received from Customer ${request.user.first_name}`
             : `File received from specialist ${request.user.first_name}`;
-        await helper.sendNotification(message, request.specialist.device_token);
+        await helper.sendNotification(
+          request.user.device_type,
+          message,
+          request.specialist.device_token
+        );
       }
       await Notification.create({
         notification: JSON.stringify(message),

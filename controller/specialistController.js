@@ -30,7 +30,7 @@ exports.addRequest = async (req, res, next) => {
     message["type"] = "Request Placed";
     message["request_id"] = request.id;
 
-    await helper.sendNotification(message, user.device_token);
+    await helper.sendNotification(user.device_type, message, user.device_token);
     await Notification.create({
       notification: JSON.stringify(message),
       userId: req.userId,
@@ -60,7 +60,7 @@ exports.requestAgain = async (req, res, next) => {
     message["type"] = "Request Placed Again";
     message["request_id"] = request.id;
 
-    await helper.sendNotification(message, user.device_token);
+    await helper.sendNotification(user.device_type, message, user.device_token);
     await Notification.create({
       notification: JSON.stringify(message),
       userId: req.userId,
@@ -87,7 +87,11 @@ exports.cancelRequest = async (req, res, next) => {
         "Request Cancelled by " + user.first_name + " " + user.last_name;
       message["type"] = "Request Cancelled";
       message["request_id"] = request.id;
-      await helper.sendNotification(message, specialist.device_token);
+      await helper.sendNotification(
+        specialist.device_type,
+        message,
+        specialist.device_token
+      );
       await Notification.create({
         notification: JSON.stringify(message),
         userId: specialist.id,
@@ -315,7 +319,11 @@ exports.confirmAssets = async (req, res, next) => {
     message["type"] = "Assets Confirmed";
     message["request_id"] = request.id;
 
-    await helper.sendNotification(message, specialist.device_token);
+    await helper.sendNotification(
+      specialist.device_type,
+      message,
+      specialist.device_token
+    );
     await Notification.create({
       notification: JSON.stringify(message),
       userId: specialist.id,
@@ -346,7 +354,7 @@ exports.markJobAsCompleted = async (req, res, next) => {
     message["type"] = "Job Completed";
     message["request_id"] = request.id;
 
-    await helper.sendNotification(message, user.device_token);
+    await helper.sendNotification(user.device_type, message, user.device_token);
     await Notification.create({
       notification: JSON.stringify(message),
       userId: req.userId,
