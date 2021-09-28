@@ -18,7 +18,6 @@ exports.removeFile = (file) => {
   }
   return "doesn't exist";
 };
-hhhh;
 exports.dataNotFound = (model, message, statuscode) => {
   if (!model) {
     const error = new Error(message);
