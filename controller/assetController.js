@@ -133,7 +133,6 @@ exports.addMultipleAssets = async (req, res, next) => {
         });
       }
       await Assets.bulkCreate(object, { include: [assetFiles, assetStatus] });
-      console.log(object);
       return res.send({ message: "inserted successfully", status: true });
     } catch (error) {
       req.files.forEach((file) => {

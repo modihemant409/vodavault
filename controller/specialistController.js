@@ -156,6 +156,7 @@ exports.getRequestDetail = async (req, res, next) => {
   }
 };
 
+//specialist
 exports.getAllJobs = async (req, res, next) => {
   try {
     const request = await specialistRequest.findAll({
