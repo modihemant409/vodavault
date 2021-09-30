@@ -16,7 +16,10 @@ exports.addRequest = async (req, res, next) => {
   try {
     const create = new Object();
     const check = await specialistRequest.findOne({
-      where: { domicileId: req.body.domicileId },
+      where: {
+        domicileId: req.body.domicileId,
+        status: ["pending", "alloted"],
+      },
     });
     helper.dataNotFound(!check, "request already sent for this Domicile", 409);
     for (const key in req.body) {
