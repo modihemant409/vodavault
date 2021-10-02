@@ -27,5 +27,6 @@ router.delete(
   assetController.deleteAssetAttachment
 );
 router.post("/add-attachment", isAuth, assetController.addAssetAttachment);
+router.post("/detectObject", assetController.detectObject);
 
 module.exports = router;

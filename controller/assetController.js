@@ -481,3 +481,54 @@ exports.changeAssetStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.detectObject = async (req, res, next) => {
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "assets/vodaVault");
+    },
+    filename: function (req, file, cb) {
+      cb(null, uuid.v4() + file.originalname.replace(/\s/g, ""));
+    },
+  });
+  var upload = multer({ storage: storage }).single("image");
+  upload(req, res, async function () {
+    const dataUrl = config.get("App.baseUrl.backEndUrl") + req.file.path;
+    try {
+      const microsofComputerVision = require("microsoft-computer-vision");
+      const myKey = config.get("computer-vision");
+      const data = new Object();
+
+      microsofComputerVision
+        .tagImage({
+          "Ocp-Apim-Subscription-Key": myKey,
+          "request-origin": "centralindia",
+          "content-type": "application/json",
+          url: dataUrl,
+        })
+        .then((result) => {
+          data["tags"] = result;
+          return microsofComputerVision.orcImage({
+            "Ocp-Apim-Subscription-Key": myKey,
+            "request-origin": "centralindia",
+            "content-type": "application/json",
+            url: dataUrl,
+            language: "en",
+            "detect-orientation": true,
+          });
+        })
+        .then((result1) => {
+          data["text"] = result1;
+          res.send({ status: true, data });
+          helper.removeFile(dataUrl);
+        })
+        .catch((err) => {
+          helper.removeFile(dataUrl);
+          throw err;
+        });
+    } catch (error) {
+      helper.removeFile(dataUrl);
+      throw error;
+    }
+  });
+};
