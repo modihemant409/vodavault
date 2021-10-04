@@ -539,8 +539,9 @@ exports.changeStatusToLoan = async (req, res, next) => {
     await Assets.update({ status: "loan" }, { where: { id: id } });
     const create = [];
     id.forEach((element) => {
-      create.push({ assetId: element.id, status: "loan" });
+      create.push({ assetId: element, status: "loan" });
     });
+    console.log(create);
     await assetStatus.bulkCreate(create);
     return res.send({ message: "updated successfully", status: true });
   } catch (error) {
