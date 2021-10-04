@@ -461,7 +461,7 @@ exports.changeAssetStatus = async (req, res, next) => {
         "sold",
         "stolen",
         "recovered",
-        "market place",
+        "marketplace",
         "lost",
         "damaged",
         "safe and insured",
@@ -524,11 +524,26 @@ exports.detectObject = async (req, res, next) => {
         })
         .catch((err) => {
           helper.removeFile(dataUrl);
-          throw err;
+          return next(err);
         });
     } catch (error) {
       helper.removeFile(dataUrl);
-      throw error;
+      return next(error);
     }
   });
+};
+
+exports.changeStatusToLoan = async (req, res, next) => {
+  try {
+    const id = req.body.assetId.split(",");
+    await Assets.update({ status: "loan" }, { where: { id: id } });
+    const create = [];
+    id.forEach((element) => {
+      create.push({ assetId: element.id, status: "loan" });
+    });
+    await assetStatus.bulkCreate(create);
+    return res.send({ message: "updated successfully", status: true });
+  } catch (error) {
+    next(error);
+  }
 };

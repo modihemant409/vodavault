@@ -37,7 +37,7 @@ const Assets = sequelize.define("asset", {
       "sold",
       "stolen",
       "recovered",
-      "market place",
+      "marketplace",
       "lost",
       "damaged",
       "safe and insured",
