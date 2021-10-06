@@ -474,7 +474,7 @@ exports.checkForSpecialistLocation = async (req, res, next) => {
       Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) * Math.sin(dlon / 2);
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     let km = r * c * 1000;
-    if (km <= 100) {
+    if (km <= 200) {
       return res.send({
         message: "domicile found",
         status: true,
