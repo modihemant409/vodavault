@@ -548,3 +548,18 @@ exports.changeStatusToLoan = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getAssetForLoan = async (req, res, next) => {
+  try {
+    const assets = await Assets.findAll({
+      where: { userId: req.userId, status: ["safe", "safe and insured"] },
+    });
+    return res.send({
+      data: assets,
+      message: "fetched successfully",
+      status: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

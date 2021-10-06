@@ -68,4 +68,10 @@ router.get(
   isSpecialist,
   specialistController.getJobOfCustomer
 );
+router.post(
+  "/check-for-location",
+  isAuth,
+  isSpecialist,
+  specialistController.checkForSpecialistLocation
+);
 module.exports = router;

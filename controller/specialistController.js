@@ -11,6 +11,7 @@ const config = require("config");
 
 const multer = require("multer");
 const uuid = require("uuid");
+const Joi = require("joi");
 
 exports.addRequest = async (req, res, next) => {
   try {
@@ -435,6 +436,52 @@ exports.getJobOfCustomer = async (req, res, next) => {
       message: "fetched successfully",
       status: true,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.checkForSpecialistLocation = async (req, res, next) => {
+  try {
+    const schema = Joi.object({
+      lat: Joi.number().required(),
+      lon: Joi.number().required(),
+      requestId: Joi.required(),
+    });
+    await schema.validateAsync(req.body);
+    let lat1 = req.body.lat;
+    let lon1 = req.body.lon;
+    const request = await specialistRequest.findOne({
+      where: { id: req.body.requestId },
+    });
+    const domicile = await Domicile.findOne({
+      where: { id: request.domicileId },
+    });
+    const pi80 = Math.PI / 180;
+    lat1 *= pi80;
+    lon1 *= pi80;
+
+    let lat2 = domicile.lat;
+    let lon2 = domicile.lng;
+    lat2 *= pi80;
+    lon2 *= pi80;
+
+    const r = 6371; // mean radius of Earth in km
+    let dlat = lat2 - lat1;
+    let dlon = lon2 - lon1;
+    let a =
+      Math.sin(dlat / 2) * Math.sin(dlat / 2) +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) * Math.sin(dlon / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let km = r * c * 1000;
+    if (km <= 100) {
+      return res.send({
+        message: "domicile found",
+        status: true,
+        data: domicile,
+      });
+    }
+    return res.send({ message: "No domicile found", status: true, data: null });
   } catch (error) {
     next(error);
   }

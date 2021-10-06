@@ -29,5 +29,6 @@ router.delete(
 router.post("/add-attachment", isAuth, assetController.addAssetAttachment);
 router.post("/detectObject", assetController.detectObject);
 router.post("/change-status-to-loan", assetController.changeStatusToLoan);
+router.get("/get-asset-for-loan", isAuth, assetController.getAssetForLoan);
 
 module.exports = router;
