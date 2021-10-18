@@ -107,3 +107,13 @@ exports.getNotification = async (req, res, next) => {
     data: notification,
   });
 };
+
+exports.addCountry = async (req, res, next) => {
+  try {
+    const country = req.params.country;
+    await User.update({ country }, { where: { id: req.userId } });
+    return res.send({ status: true, message: "success" });
+  } catch (error) {
+    next(error);
+  }
+};

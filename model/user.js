@@ -16,14 +16,14 @@ const User = sequelize.define("user", {
   last_name: {
     type: DataTypes.STRING,
     allowNull: true,
-    defaultValue:" "
+    defaultValue: " ",
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },
-  	mobile: {
+  mobile: {
     type: DataTypes.BIGINT,
     allowNull: true,
   },
@@ -38,6 +38,10 @@ const User = sequelize.define("user", {
   status: {
     type: DataTypes.ENUM("Blocked", "Unblocked"),
     defaultValue: "Unblocked",
+  },
+  country: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   token: {
     type: DataTypes.STRING,

@@ -12,5 +12,6 @@ router.get(
   userController.removeNotification
 );
 router.get("/get-notification", isAuth, userController.getNotification);
+router.get("/add-country/:country", isAuth, userController.addCountry);
 
 module.exports = router;
