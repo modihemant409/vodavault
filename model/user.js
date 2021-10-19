@@ -41,7 +41,7 @@ const User = sequelize.define("user", {
   },
   country: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   token: {
     type: DataTypes.STRING,
