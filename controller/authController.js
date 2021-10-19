@@ -79,6 +79,7 @@ exports.signup = async (req, res, next) => {
       gender: joi.string().required(),
       mobile: joi.number().required(),
       profile_image: Joi.allow(),
+      country: Joi.string().allow(),
       user_type: Joi.allow().valid("user", "specialist"),
       device_token: Joi.allow(),
     });
