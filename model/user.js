@@ -59,6 +59,10 @@ const User = sequelize.define("user", {
     type: DataTypes.ENUM("0", "1"),
     defaultValue: "0",
   },
+  is_user_premimum: {
+    type: DataTypes.ENUM("0", "1"),
+    defaultValue: "0",
+  },
   is_booked: {
     type: DataTypes.ENUM("0", "1"),
     defaultValue: "0",

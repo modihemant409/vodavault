@@ -6,12 +6,9 @@ const isAuth          = require("../middleware/is-auth");
 
 router.put("/edit-profile", isAuth, userController.editProfile);
 router.get("/get-profile", isAuth, userController.getProfile);
-router.get(
-  "/remove-notification/:notificationId",
-  isAuth,
-  userController.removeNotification
-);
+router.get("/remove-notification/:notificationId",isAuth,userController.removeNotification);
 router.get("/get-notification", isAuth, userController.getNotification);
 router.get("/add-country/:country", isAuth, userController.addCountry);
+router.post("/make-user-premiume", isAuth,userController.makeUserPremiume);
 
 module.exports = router;

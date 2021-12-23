@@ -21,6 +21,10 @@ const specialistRequest = sequelize.define("specialist_request", {
     type: DataTypes.ENUM("cancelled", "pending", "alloted", "completed"),
     defaultValue: "pending",
   },
+  is_user_premimum: {
+    type: DataTypes.ENUM("0", "1"),
+    defaultValue: "0",
+  },
   completed_at: {
     type: DataTypes.STRING,
     allowNull: true,

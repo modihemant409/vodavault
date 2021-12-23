@@ -117,3 +117,16 @@ exports.addCountry = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.makeUserPremiume = async(req,res,next)=>{
+
+  try {
+    const is_user_premimum = req.body.status;
+    const userId           = req.body.userId;
+    await User.update({ is_user_premimum: is_user_premimum }, { where: { id: userId } });
+    return res.send({ status: true, message: "success update user premium status" });
+  } catch (error) {
+    next(error);
+  }
+
+}
