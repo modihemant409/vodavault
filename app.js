@@ -1,31 +1,29 @@
-const express = require("express");
-const app = express();
-const PORT = 47000;
-const socket = require("socket.io");
-const cors = require("cors");
-//const helemt = require("helmet");
-const path = require("path");
-
+const express   = require("express");
+const app       = express();
+const PORT      = 47000;
+const socket    = require("socket.io");
+const cors      = require("cors");
+//const helemt  = require("helmet");
+const path      = require("path");
 //database
-const db = require("./database/util");
+const db        = require("./database/util");
 
 app.set("view engine", "ejs");
 app.set("views", "views");
 
 //Routes
-const authRoutes = require("./routes/auth");
-const domicileRoutes = require("./routes/domicile");
-const assetRoutes = require("./routes/asset");
-const dashboardRoutes = require("./routes/dashboard");
-const userRoutes = require("./routes/user");
-const specialistRoutes = require("./routes/specialist");
-const quotationRoutes = require("./routes/quotation");
-const chatRoutes = require("./routes/chat");
-const insuranceAssets = require("./model/insuranceAssets");
-const Insurance = require("./model/Insurance");
-
+const authRoutes        = require("./routes/auth");
+const domicileRoutes    = require("./routes/domicile");
+const assetRoutes       = require("./routes/asset");
+const dashboardRoutes   = require("./routes/dashboard");
+const userRoutes        = require("./routes/user");
+const specialistRoutes  = require("./routes/specialist");
+const quotationRoutes   = require("./routes/quotation");
+const chatRoutes        = require("./routes/chat");
+const insuranceAssets   = require("./model/insuranceAssets");
+const Insurance         = require("./model/Insurance");
 //Relations
-const relations = require("./Relations/relations").relations();
+const relations         = require("./Relations/relations").relations();
 
 //app.use(helemt());
 app.use(express.urlencoded({ extended: false }));
