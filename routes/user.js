@@ -10,5 +10,6 @@ router.get("/remove-notification/:notificationId",isAuth,userController.removeNo
 router.get("/get-notification", isAuth, userController.getNotification);
 router.get("/add-country/:country", isAuth, userController.addCountry);
 router.post("/make-user-premiume", isAuth,userController.makeUserPremiume);
+router.post("/coupon-apply", isAuth, userController.ApplyCoupon);
 
 module.exports = router;

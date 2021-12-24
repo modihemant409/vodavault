@@ -4,19 +4,20 @@ const uuid = require("uuid");
 const config = require("config");
 const helper = require("../helper/functions");
 
-const Assets = require("../model/Assets");
-const assetFiles = require("../model/assetFiles");
-const Domicile = require("../model/Domicile");
-const assetStatus = require("../model/assetStatus");
-const assetInvoices = require("../model/assetInvoices");
-const quotationAssets = require("../model/quotationAssets");
-const { Op } = require("sequelize");
-const specialistAssets = require("../model/specialistAsset");
-const insuranceAssets = require("../model/insuranceAssets");
-const Quotation = require("../model/quotation");
-const Insurance = require("../model/Insurance");
-const valuationAssets = require("../model/valuationAssets");
-const Valuation = require("../model/Valuation");
+const Assets            = require("../model/Assets");
+const assetFiles        = require("../model/assetFiles");
+const Domicile          = require("../model/Domicile");
+const assetStatus       = require("../model/assetStatus");
+const assetInvoices     = require("../model/assetInvoices");
+const quotationAssets   = require("../model/quotationAssets");
+const { Op }            = require("sequelize");
+const specialistAssets  = require("../model/specialistAsset");
+const insuranceAssets   = require("../model/insuranceAssets");
+const Quotation         = require("../model/quotation");
+const Insurance         = require("../model/Insurance");
+const valuationAssets   = require("../model/valuationAssets");
+const Valuation         = require("../model/Valuation");
+const moment            = require('moment');
 
 exports.getAssetList = async (req, res, next) => {
   const asset = await Assets.findAll({

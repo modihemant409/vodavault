@@ -63,6 +63,10 @@ const User = sequelize.define("user", {
     type: DataTypes.ENUM("0", "1"),
     defaultValue: "0",
   },
+  expire_date: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
   is_booked: {
     type: DataTypes.ENUM("0", "1"),
     defaultValue: "0",

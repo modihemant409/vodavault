@@ -1,11 +1,14 @@
-const Joi = require("joi");
-const multer = require("multer");
-const helper = require("../helper/functions");
-const uuid = require("uuid");
-const config = require("config");
+const Joi     = require("joi");
+const multer  = require("multer");
+const helper  = require("../helper/functions");
+const uuid    = require("uuid");
+const config  = require("config");
 
-const User = require("../model/user");
-const Notification = require("../model/notification");
+const User              = require("../model/user");
+const Coupon            = require("../model/Coupon");
+const Notification      = require("../model/notification");
+const { Sequelize,Op }  = require("sequelize");
+const moment            = require('moment');
 
 exports.editProfile = async (req, res, next) => {
   var storage = multer.diskStorage({
@@ -123,10 +126,74 @@ exports.makeUserPremiume = async(req,res,next)=>{
   try {
     const is_user_premimum = req.body.status;
     const userId           = req.body.userId;
-    await User.update({ is_user_premimum: is_user_premimum }, { where: { id: userId } });
+
+    const sevenDaysFromNow = new Date(new Date().setDate(new Date().getDate() +30));
+
+    const mydate = moment(sevenDaysFromNow).format('YYYY-MM-DD');
+
+    await User.update({ is_user_premimum: is_user_premimum, expire_date: mydate}, { where: { id: userId } });
     return res.send({ status: true, message: "success update user premium status" });
   } catch (error) {
     next(error);
   }
+};
 
-}
+exports.ApplyCoupon = async (req, res, next) => {
+
+  try {
+    const coupon_code = req.body.coupon_code;
+    const userId = req.body.userId;
+
+    var date_ob = new Date();
+    var day = ("0" + date_ob.getDate()).slice(-2);
+    var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    var year = date_ob.getFullYear();
+
+    // var date = year + "-" + month + "-" + day;
+    // console.log(date);
+
+    // var hours = date_ob.getHours();
+    // var minutes = date_ob.getMinutes();
+    // var seconds = date_ob.getSeconds();
+
+    var dateTime = year+"-"+month+"-"+day;
+    // console.log(dateTime);
+    const copounlist = await Coupon.findOne({
+      where: {
+        coupon_code: coupon_code,
+        end_date: {
+          // [Op.eq]: dateTime
+          [Op.gte]: dateTime,
+        }
+      }
+    });
+
+    if (copounlist){
+      
+        const sevenDaysFromNow = new Date(new Date().setDate(new Date().getDate() + copounlist.no_of_days));
+    
+        const mydate = moment(sevenDaysFromNow).format('YYYY-MM-DD');
+        // console.log(mydate);
+        await User.update({ is_user_premimum: "1", expire_date: mydate}, { where: { id: userId } });
+        return res.send({
+          message: "successfully apply code",
+          status: true,
+          data: [],
+        });
+
+    }
+    else{
+        return res.send({
+          message: "code not valid",
+          status: false,
+          data: [],
+        });
+    }
+    //
+    //await User.update({ is_user_premimum: is_user_premimum }, { where: { id: userId } });
+   
+
+  } catch (error) {
+    next(error);
+  }
+};

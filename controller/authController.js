@@ -103,8 +103,13 @@ exports.signup = async (req, res, next) => {
         create["profile_image"] =
           config.get("App.baseUrl.backEndUrl") + req.file.path;
       }
-      const hashedPassword = await bcrypt.hash(create["password"], 12);
-      create["password"] = hashedPassword;
+      const hashedPassword    = await bcrypt.hash(create["password"], 12);
+      create["password"]      = hashedPassword;
+      // create["password"]   = hashedPassword;
+      const sevenDaysFromNow  = new Date(new Date().setDate(new Date().getDate() + 30));
+      const mydate            = moment(sevenDaysFromNow).format('YYYY-MM-DD');
+      create["expire_date"]   = mydate;
+
       console.log(create);
       user = await User.create(create, { transaction });
 
