@@ -4,20 +4,20 @@ const uuid = require("uuid");
 const config = require("config");
 const helper = require("../helper/functions");
 
-const Assets            = require("../model/Assets");
-const assetFiles        = require("../model/assetFiles");
-const Domicile          = require("../model/Domicile");
-const assetStatus       = require("../model/assetStatus");
-const assetInvoices     = require("../model/assetInvoices");
-const quotationAssets   = require("../model/quotationAssets");
-const { Op }            = require("sequelize");
-const specialistAssets  = require("../model/specialistAsset");
-const insuranceAssets   = require("../model/insuranceAssets");
-const Quotation         = require("../model/quotation");
-const Insurance         = require("../model/Insurance");
-const valuationAssets   = require("../model/valuationAssets");
-const Valuation         = require("../model/Valuation");
-const moment            = require('moment');
+const Assets = require("../model/Assets");
+const assetFiles = require("../model/assetFiles");
+const Domicile = require("../model/Domicile");
+const assetStatus = require("../model/assetStatus");
+const assetInvoices = require("../model/assetInvoices");
+const quotationAssets = require("../model/quotationAssets");
+const { Op } = require("sequelize");
+const specialistAssets = require("../model/specialistAsset");
+const insuranceAssets = require("../model/insuranceAssets");
+const Quotation = require("../model/quotation");
+const Insurance = require("../model/Insurance");
+const valuationAssets = require("../model/valuationAssets");
+const Valuation = require("../model/Valuation");
+const moment = require("moment");
 
 exports.getAssetList = async (req, res, next) => {
   const asset = await Assets.findAll({
@@ -222,20 +222,20 @@ exports.updateAsset = (req, res, next) => {
         if (key == "assetId") continue;
         update[key] = req.body[key];
       }
-      if (req.file) {
-        update["asset_image"] =
-          config.get("App.baseUrl.backEndUrl") + req.file.path;
-        await assetFiles.create({
-          file: config.get("App.baseUrl.backEndUrl") + req.file.path,
-          assetId: asset.id,
-        });
-      }
-      if (asset.asset_image) {
-        helper.removeFile(asset.asset_image);
-        await assetFiles.destroy({
-          where: { file: asset.asset_image, assetId: asset.id },
-        });
-      }
+      // if (req.file) {
+      //   update["asset_image"] =
+      //     config.get("App.baseUrl.backEndUrl") + req.file.path;
+      //   await assetFiles.create({
+      //     file: config.get("App.baseUrl.backEndUrl") + req.file.path,
+      //     assetId: asset.id,
+      //   });
+      //   if (asset.asset_image) {
+      //     helper.removeFile(asset.asset_image);
+      //     await assetFiles.destroy({
+      //       where: { file: asset.asset_image, assetId: asset.id },
+      //     });
+      //   }
+      // }
       await asset.update(update);
       return res.send({ message: "asset updated successfully", status: true });
     } catch (error) {
