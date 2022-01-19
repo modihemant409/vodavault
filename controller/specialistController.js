@@ -284,6 +284,7 @@ exports.getJobDetail = async (req, res, next) => {
             "id",
             "user_type",
             "email",
+            "mobile",
           ],
         },
         { model: Domicile },
