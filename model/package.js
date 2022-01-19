@@ -46,6 +46,10 @@ const Package = sequelize.define("packages", {
         type: DataTypes.ENUM("0", "1"),
         defaultValue: "1",
     },
+    get_valuation: {
+        type: DataTypes.ENUM("0", "1"),
+        defaultValue: "1",
+    },
     status: {
         type: DataTypes.ENUM("0", "1"),
         defaultValue: "1",
