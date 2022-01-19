@@ -16,6 +16,9 @@ const Notification = require("../model/notification");
 const chatMessage = require("../model/chatMessage");
 const Valuation = require("../model/Valuation");
 const valuationAssets = require("../model/valuationAssets");
+const package = require("../model/package");
+const packageAsset = require("../model/packageAsset");
+const userPackageBuy = require("../model/userPackageBuy");
 
 exports.relations = () => {
   //domicile relations
@@ -125,4 +128,10 @@ exports.relations = () => {
   //chat
   specialistRequest.hasMany(chatMessage, { foreignKey: "requestId" });
   chatMessage.belongsTo(specialistRequest, { foreignKey: "requestId" });
+
+  //Packages.hasMany(PackageAssets);
+  //PackageAssets.belongsTo(Packages);
+  package.hasMany(packageAsset ,{ foreignKey: "package_id" });
+  packageAsset.belongsTo(package, { foreignKey: "package_id" });
+  userPackageBuy.belongsTo(package, { foreignKey: "package_id" });
 };
