@@ -38,6 +38,7 @@ exports.addRequest = async (req, res, next) => {
     await Notification.create({
       notification: JSON.stringify(message),
       userId: req.userId,
+      requestId: request.id,
     });
     return res.send({
       message: "request sent successfully",
@@ -68,6 +69,7 @@ exports.requestAgain = async (req, res, next) => {
     await Notification.create({
       notification: JSON.stringify(message),
       userId: req.userId,
+      requestId: request.id,
     });
     return res.send({ message: "request sent successfully", status: true });
   } catch (error) {
@@ -331,6 +333,7 @@ exports.confirmAssets = async (req, res, next) => {
     await Notification.create({
       notification: JSON.stringify(message),
       userId: specialist.id,
+      requestId: request.id,
     });
     return res.send({ message: "assets added successfully", status: true });
   } catch (error) {
@@ -362,6 +365,7 @@ exports.markJobAsCompleted = async (req, res, next) => {
     await Notification.create({
       notification: JSON.stringify(message),
       userId: req.userId,
+      requestId: request.id,
     });
     return res.send({ status: true, message: "Job completed successfully" });
   } catch (error) {

@@ -64,6 +64,7 @@ exports.sendMessage = async (req, res, next) => {
       await Notification.create({
         notification: JSON.stringify(message),
         userId: req.userId,
+        requestId: request.id,
       });
       return res.send({ message: "sent successfully", status: true });
     } catch (error) {

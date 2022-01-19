@@ -1,4 +1,4 @@
-const config        = require("config");
+const config = require("config");
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
   {
     dialect: "mysql",
     host: "localhost",
-    logging: false ,
+    logging: false,
   }
 );
 

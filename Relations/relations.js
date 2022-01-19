@@ -125,13 +125,16 @@ exports.relations = () => {
   User.hasMany(Notification);
   Notification.belongsTo(User);
 
+  specialistRequest.hasMany(Notification, { foreignKey: "requestId" });
+  Notification.belongsTo(specialistRequest, { foreignKey: "requestId" });
+
   //chat
   specialistRequest.hasMany(chatMessage, { foreignKey: "requestId" });
   chatMessage.belongsTo(specialistRequest, { foreignKey: "requestId" });
 
   //Packages.hasMany(PackageAssets);
   //PackageAssets.belongsTo(Packages);
-  package.hasMany(packageAsset ,{ foreignKey: "package_id" });
+  package.hasMany(packageAsset, { foreignKey: "package_id" });
   packageAsset.belongsTo(package, { foreignKey: "package_id" });
   userPackageBuy.belongsTo(package, { foreignKey: "package_id" });
 };
