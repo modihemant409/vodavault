@@ -7,6 +7,12 @@ const config  = require("config");
 const User              = require("../model/user");
 const Coupon            = require("../model/Coupon");
 const Notification      = require("../model/notification");
+<<<<<<< HEAD
+=======
+const Package           = require("../model/package");
+const packageAsset      = require("../model/packageAsset");
+const userPackageBuy    = require("../model/userPackageBuy");
+>>>>>>> cde4a08f3ab41a8b8153d359dee921d0a370b275
 const { Sequelize,Op }  = require("sequelize");
 const moment            = require('moment');
 
@@ -138,6 +144,30 @@ exports.makeUserPremiume = async(req,res,next)=>{
   }
 };
 
+<<<<<<< HEAD
+=======
+exports.SubscriptionsBuy = async(req,res,next)=>{
+
+  try {
+    const userId           = req.body.user_id;
+    const package_id       = req.body.package_id;
+    const price            = req.body.price;
+    const transaction_id   = req.body.transaction_id;
+
+    await userPackageBuy.create({ 
+        package_id: package_id,
+        user_id: userId,
+        price: price,
+        transaction_id: transaction_id,
+     });
+
+    return res.send({ status: true, message: "success add subscription buy" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+>>>>>>> cde4a08f3ab41a8b8153d359dee921d0a370b275
 exports.ApplyCoupon = async (req, res, next) => {
 
   try {
@@ -191,9 +221,88 @@ exports.ApplyCoupon = async (req, res, next) => {
     }
     //
     //await User.update({ is_user_premimum: is_user_premimum }, { where: { id: userId } });
+<<<<<<< HEAD
    
+=======
+>>>>>>> cde4a08f3ab41a8b8153d359dee921d0a370b275
+
+  } catch (error) {
+    next(error);
+  }
+<<<<<<< HEAD
+};
+=======
+};
+
+exports.SubscriptionsData = async (req, res, next) => {
+
+  try {
+        // console.log(mydate);
+   const notification = await Package.findAll({
+      where: { status: '1' },
+     include: [
+     {
+         model: packageAsset,
+     },
+    ]
+    });
+        return res.send({
+          message: "subscriptions data list",
+          status: true,
+          data: notification,
+        });
+
+    //await User.update({ is_user_premimum: is_user_premimum }, { where: { id: userId } });
 
   } catch (error) {
     next(error);
   }
 };
+exports.SubscriptionsDetails = async (req, res, next) => {
+
+  try {
+
+  // console.log(mydate);
+   const notification = await Package.findOne({
+     where: { id: req.params.package_id },
+     include: [
+     {
+         model: packageAsset,
+     },
+    ]
+    });
+        return res.send({
+          message: "subscriptions data list",
+          status: true,
+          data: notification,
+        });
+
+    //await User.update({ is_user_premimum: is_user_premimum }, { where: { id: userId } });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.My_Subscription = async (req, res, next) => {
+
+  try {
+    const notification = await userPackageBuy.findAll({
+      where: { user_id: req.params.userId },
+      include: [
+        {
+          model: Package,
+        },
+      ]
+    });
+
+    return res.send({
+      message: "subscriptions list",
+      status: true,
+      data: notification,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+>>>>>>> cde4a08f3ab41a8b8153d359dee921d0a370b275
