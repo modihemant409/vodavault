@@ -318,7 +318,7 @@ exports.confirmAssets = async (req, res, next) => {
       requestAsset.specialistRequestId
     );
     console.log(request.id);
-    const user = User.findByPk(req.userId);
+    const user = await User.findByPk(req.userId);
     const specialist = await User.findByPk(request.specialistId);
     const message = new Object();
     message["message"] =
