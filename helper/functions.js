@@ -53,19 +53,20 @@ exports.sendNotification = async (deviceType, message, token) => {
       title: "VodaVault",
       sound: "default",
       icon: "",
+      ...message,
     };
     const body = {
-    content_available: true,
-    priority: "high",
-    ...message,
+      content_available: true,
+      priority: "high",
+      ...message,
     };
     notificationBody = {
       data: notification,
       to: token,
-      notification:body,
+      notification: body,
     };
   }
-  console.log(notificationBody)
+  console.log(notificationBody);
   axios
     .post("https://fcm.googleapis.com/fcm/send", notificationBody, {
       headers: {
