@@ -86,9 +86,10 @@ exports.cancelRequest = async (req, res, next) => {
     });
     helper.dataNotFound(request, "Invalid request", 404);
     await request.update({ status: "cancelled", reason });
-    const user = User.findByPk(req.userId);
+    const user = await User.findByPk(req.userId);
     const specialist = await User.findByPk(request.specialistId);
     if (specialist) {
+      const message = new Object();
       message["message"] =
         "Request Cancelled by " + user.first_name + " " + user.last_name;
       message["type"] = "Request Cancelled";
@@ -101,6 +102,7 @@ exports.cancelRequest = async (req, res, next) => {
       await Notification.create({
         notification: JSON.stringify(message),
         userId: specialist.id,
+        requestId: request.id,
       });
     }
     return res.send({
@@ -317,8 +319,7 @@ exports.confirmAssets = async (req, res, next) => {
     const request = await specialistRequest.findByPk(
       requestAsset.specialistRequestId
     );
-    console.log(request.id);
-    const user = User.findByPk(req.userId);
+    const user = await User.findByPk(req.userId);
     const specialist = await User.findByPk(request.specialistId);
     const message = new Object();
     message["message"] =
