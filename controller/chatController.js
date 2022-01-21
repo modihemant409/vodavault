@@ -66,7 +66,11 @@ exports.sendMessage = async (req, res, next) => {
         userId: req.userId,
         requestId: request.id,
       });
-      return res.send({ message: "sent successfully", status: true });
+      return res.send({
+        message: "sent successfully",
+        status: true,
+        data: create,
+      });
     } catch (error) {
       if (req.file) {
         helper.removeFile(req.file.path);
